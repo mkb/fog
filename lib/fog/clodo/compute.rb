@@ -82,15 +82,9 @@ module Fog
           @clodo_auth_token = options[:clodo_auth_token]
           @clodo_management_url = options[:clodo_management_url]
           @clodo_must_reauthenticate = false
-          
-          @connection_options     = options[:connection_options] || {}
-          @persistent = options[:persistent]      || false
-          
-          
           authenticate
           Excon.ssl_verify_peer = false if options[:clodo_servicenet] == true
-          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}",
-              @persistent, @connection_options, options[:instrumentor_params])
+          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}", options[:persistent])
         end
 
         def reload

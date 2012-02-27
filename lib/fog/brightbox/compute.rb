@@ -125,9 +125,7 @@ module Fog
           @brightbox_client_id  = options[:brightbox_client_id] || Fog.credentials[:brightbox_client_id]
           @brightbox_secret     = options[:brightbox_secret] || Fog.credentials[:brightbox_secret]
           @persistent           = options[:persistent] || false
-          @instrumentor_params = options[:instrumentor_params]
-          @connection = Fog::Connection.new(@api_url, @persistent,
-              @connection_options, @instrumentor_params)
+          @connection = Fog::Connection.new(@api_url, @persistent, @connection_options)
         end
 
         def request(method, url, expected_responses, options = nil)
@@ -148,7 +146,7 @@ module Fog
         def get_oauth_token(options = {})
           auth_url = options[:brightbox_auth_url] || @auth_url
 
-          connection = Fog::Connection.new(auth_url, false, @connection_options, @instrumentor_params)
+          connection = Fog::Connection.new(auth_url)
           @authentication_body = MultiJson.encode({'client_id' => @brightbox_client_id, 'grant_type' => 'none'})
 
           response = connection.request({

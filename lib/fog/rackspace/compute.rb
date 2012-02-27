@@ -87,12 +87,10 @@ module Fog
           @rackspace_management_url = options[:rackspace_management_url]
           @rackspace_must_reauthenticate = false
           @connection_options = options[:connection_options] || {}
-          @instrumentor_params = options[:instrumentor_params] || {}
           authenticate
           Excon.ssl_verify_peer = false if options[:rackspace_servicenet] == true
           @persistent = options[:persistent] || false
-          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}",
-              @persistent, @connection_options, @instrumentor_params)
+          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}", @persistent, @connection_options)
         end
 
         def reload
@@ -141,8 +139,7 @@ module Fog
               :rackspace_username => @rackspace_username,
               :rackspace_auth_url => @rackspace_auth_url
             }
-            credentials = Fog::Rackspace.authenticate(options,
-                @connection_options, @instrumentor_params)
+            credentials = Fog::Rackspace.authenticate(options, @connection_options)
             @auth_token = credentials['X-Auth-Token']
             uri = URI.parse(credentials['X-Server-Management-Url'])
           else

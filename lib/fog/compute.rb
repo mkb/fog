@@ -7,8 +7,7 @@ module Fog
 
     def self.new(attributes)
       attributes = attributes.dup # prevent delete from having side effects
-
-      compute = case provider = attributes.delete(:provider).to_s.downcase.to_sym
+      case provider = attributes.delete(:provider).to_s.downcase.to_sym
       when :aws
         require 'fog/aws/compute'
         Fog::Compute::AWS.new(attributes)
@@ -78,8 +77,6 @@ module Fog
       else
         raise ArgumentError.new("#{provider} is not a recognized compute provider")
       end
-
-      return compute
     end
 
     def self.providers
@@ -96,5 +93,6 @@ module Fog
       end
       servers
     end
+
   end
 end

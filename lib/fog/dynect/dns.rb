@@ -73,8 +73,7 @@ module Fog
           @persistent = options[:persistent]  || true
           @scheme     = options[:scheme]      || 'https'
           @version    = options[:version]     || '2.3.1'
-          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}",
-              @persistent, @connection_options, options[:instrumentor_params])
+          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}", @persistent, @connection_options)
         end
 
         def auth_token

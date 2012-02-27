@@ -1,11 +1,9 @@
 module Fog
   class Connection
 
-    def initialize(url, persistent=false, connection_params={}, instrumentor_params={})
-      @excon = Excon.new(url, connection_params)
+    def initialize(url, persistent=false, params={})
+      @excon = Excon.new(url, params)
       @persistent = persistent
-      @instrumentor = instrumentor_params[:instrumentor]
-      @instrumentor_name = instrumentor_params[:instrumentor_name] || 'fog.connection'
     end
 
     def request(params, &block)
@@ -19,15 +17,8 @@ module Fog
         end
       end
 
-      response = nil
-      if @instrumentor
-        @instrumentor.instrument(@instrumentor_name, params) do
-          response = @excon.request(params, &block)
-        end
-      else
-        response = @excon.request(params, &block)
-      end
-
+      response = @excon.request(params, &block)
+      
       if parser
         body.finish
         response.body = parser.response
@@ -39,5 +30,6 @@ module Fog
     def reset
       @excon.reset
     end
+
   end
 end
